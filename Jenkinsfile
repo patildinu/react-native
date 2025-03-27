@@ -1,28 +1,41 @@
 pipeline {
     agent any
+
     stages {
         stage('Checkout Code') {
             steps {
-                git url: 'https://github.com/patildinu/react-native.git', branch: 'main'
+                git branch: 'main', url: 'https://github.com/patildinu/react-native.git'
             }
         }
+
         stage('Set Up Node.js') {
             steps {
-                bat 'node -v'
-                bat 'npm -v'
+                bat '''
+                    echo Setting up Node.js...
+                    node -v
+                    npm -v
+                '''
             }
         }
+
         stage('Install Dependencies') {
             steps {
-                bat 'npm cache clean --force'
-                bat 'npm install'
+                bat '''
+                    echo Cleaning npm cache...
+                    npm cache clean --force
+
+                    echo Installing dependencies with legacy peer deps...
+                    npm install --legacy-peer-deps
+                '''
             }
         }
+
         stage('Prepare Android Build') {
             steps {
                 bat 'echo sdk.dir=C:\\Android\\Sdk > android\\local.properties'
             }
         }
+
         stage('Build Android APK') {
             steps {
                 bat 'cd android && gradlew.bat assembleRelease'

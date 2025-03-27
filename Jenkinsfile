@@ -1,77 +1,112 @@
 pipeline {
     agent any
-
-    environment {
-        NODE_VERSION = '20.x'
-        ANDROID_HOME = "C:\\Android\\Sdk"
-        ANDROID_SDK_ROOT = "C:\\Android\\Sdk"
-        BUILD_DIR = "android\\app\\build\\outputs\\apk\\release"
-        APP_NAME = "project08"
-        FIREBASE_APP_ID = "1:1056209811373:android:fb3140b3b9f70096ea9324"
-    }
-
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/patildinu/react-native.git'
+                git url: 'https://github.com/patildinu/react-native.git', branch: 'main'
             }
         }
-
         stage('Set Up Node.js') {
             steps {
-                bat '''
-                    echo Setting up Node.js...
-                    SET PATH=%PATH%;C:\\Program Files\\nodejs
-                    echo Using Node.js from Jenkins tool configuration
-                    node -v
-                    npm -v
-                '''
+                bat 'node -v'
+                bat 'npm -v'
             }
         }
-
         stage('Install Dependencies') {
             steps {
-                bat '''
-                    echo Cleaning npm cache...
-                    npm cache clean --force
-
-                    
-                    echo Installing dependencies...
-                    npm install
-                '''
+                bat 'npm cache clean --force'
+                bat 'npm install'
             }
         }
-
         stage('Prepare Android Build') {
             steps {
-                bat '''
-                    echo Setting up local.properties...
-                    echo sdk.dir=%ANDROID_HOME% > android\\local.properties
-                '''
+                bat 'echo sdk.dir=C:\\Android\\Sdk > android\\local.properties'
             }
         }
-
         stage('Build Android APK') {
             steps {
-                bat '''
-                    echo Building Android APK...
-                    cd android
-                    chmod +x gradlew
-                    gradlew.bat assembleRelease
-                '''
+                bat 'cd android && gradlew.bat assembleRelease'
             }
-        }
-    }
-
-    post {
-        success {
-            echo "Build successful!"
-        }
-        failure {
-            echo "Build failed. Check the logs for errors."
         }
     }
 }
+
+
+
+// pipeline {
+//     agent any
+
+//     environment {
+//         NODE_VERSION = '20.x'
+//         ANDROID_HOME = "C:\\Android\\Sdk"
+//         ANDROID_SDK_ROOT = "C:\\Android\\Sdk"
+//         BUILD_DIR = "android\\app\\build\\outputs\\apk\\release"
+//         APP_NAME = "project08"
+//         FIREBASE_APP_ID = "1:1056209811373:android:fb3140b3b9f70096ea9324"
+//     }
+
+//     stages {
+//         stage('Checkout Code') {
+//             steps {
+//                 git branch: 'main', url: 'https://github.com/patildinu/react-native.git'
+//             }
+//         }
+
+//         stage('Set Up Node.js') {
+//             steps {
+//                 bat '''
+//                     echo Setting up Node.js...
+//                     SET PATH=%PATH%;C:\\Program Files\\nodejs
+//                     echo Using Node.js from Jenkins tool configuration
+//                     node -v
+//                     npm -v
+//                 '''
+//             }
+//         }
+
+//         stage('Install Dependencies') {
+//             steps {
+//                 bat '''
+//                     echo Cleaning npm cache...
+//                     npm cache clean --force
+
+                    
+//                     echo Installing dependencies...
+//                     npm install
+//                 '''
+//             }
+//         }
+
+//         stage('Prepare Android Build') {
+//             steps {
+//                 bat '''
+//                     echo Setting up local.properties...
+//                     echo sdk.dir=%ANDROID_HOME% > android\\local.properties
+//                 '''
+//             }
+//         }
+
+//         stage('Build Android APK') {
+//             steps {
+//                 bat '''
+//                     echo Building Android APK...
+//                     cd android
+//                     chmod +x gradlew
+//                     gradlew.bat assembleRelease
+//                 '''
+//             }
+//         }
+//     }
+
+//     post {
+//         success {
+//             echo "Build successful!"
+//         }
+//         failure {
+//             echo "Build failed. Check the logs for errors."
+//         }
+//     }
+// }
 
 
 

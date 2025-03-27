@@ -1,12 +1,11 @@
-
 pipeline {
     agent any
 
     environment {
         NODE_VERSION = '20.x'
-        ANDROID_HOME = "/opt/android-sdk"
-        ANDROID_SDK_ROOT = "/opt/android-sdk"
-        BUILD_DIR = "android/app/build/outputs/apk/release"
+        ANDROID_HOME = "C:\\Android\\Sdk"
+        ANDROID_SDK_ROOT = "C:\\Android\\Sdk"
+        BUILD_DIR = "android\\app\\build\\outputs\\apk\\release"
         APP_NAME = "project08"
         FIREBASE_APP_ID = "1:1056209811373:android:fb3140b3b9f70096ea9324"
     }
@@ -20,10 +19,10 @@ pipeline {
 
         stage('Set Up Node.js') {
             steps {
-                sh '''
-                    echo "Setting up Node.js..."
-                    export PATH=$PATH:/var/lib/jenkins/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/Node20/bin
-                    echo "Using Node.js from Jenkins tool configuration"
+                bat '''
+                    echo Setting up Node.js...
+                    SET PATH=%PATH%;C:\\Program Files\\nodejs
+                    echo Using Node.js from Jenkins tool configuration
                     node -v
                     npm -v
                 '''
@@ -32,8 +31,8 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh '''
-                    echo "Installing dependencies..."
+                bat '''
+                    echo Installing dependencies...
                     npm install
                 '''
             }
@@ -41,20 +40,20 @@ pipeline {
 
         stage('Prepare Android Build') {
             steps {
-                sh '''
-                    echo "Setting up local.properties..."
-                    echo "sdk.dir=$ANDROID_HOME" > android/local.properties
+                bat '''
+                    echo Setting up local.properties...
+                    echo sdk.dir=%ANDROID_HOME% > android\\local.properties
                 '''
             }
         }
 
         stage('Build Android APK') {
             steps {
-                sh '''
-                    echo "Building Android APK..."
+                bat '''
+                    echo Building Android APK...
                     cd android
                     chmod +x gradlew
-                    ./gradlew assembleRelease
+                    gradlew.bat assembleRelease
                 '''
             }
         }
@@ -69,6 +68,82 @@ pipeline {
         }
     }
 }
+
+
+
+
+
+
+// pipeline {
+//     agent any
+
+//     environment {
+//         NODE_VERSION = '20.x'
+//         ANDROID_HOME = "/opt/android-sdk"
+//         ANDROID_SDK_ROOT = "/opt/android-sdk"
+//         BUILD_DIR = "android/app/build/outputs/apk/release"
+//         APP_NAME = "project08"
+//         FIREBASE_APP_ID = "1:1056209811373:android:fb3140b3b9f70096ea9324"
+//     }
+
+//     stages {
+//         stage('Checkout Code') {
+//             steps {
+//                 git branch: 'main', url: 'https://github.com/patildinu/react-native.git'
+//             }
+//         }
+
+//         stage('Set Up Node.js') {
+//             steps {
+//                 sh '''
+//                     echo "Setting up Node.js..."
+//                     export PATH=$PATH:/var/lib/jenkins/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/Node20/bin
+//                     echo "Using Node.js from Jenkins tool configuration"
+//                     node -v
+//                     npm -v
+//                 '''
+//             }
+//         }
+
+//         stage('Install Dependencies') {
+//             steps {
+//                 sh '''
+//                     echo "Installing dependencies..."
+//                     npm install
+//                 '''
+//             }
+//         }
+
+//         stage('Prepare Android Build') {
+//             steps {
+//                 sh '''
+//                     echo "Setting up local.properties..."
+//                     echo "sdk.dir=$ANDROID_HOME" > android/local.properties
+//                 '''
+//             }
+//         }
+
+//         stage('Build Android APK') {
+//             steps {
+//                 sh '''
+//                     echo "Building Android APK..."
+//                     cd android
+//                     chmod +x gradlew
+//                     ./gradlew assembleRelease
+//                 '''
+//             }
+//         }
+//     }
+
+//     post {
+//         success {
+//             echo "Build successful!"
+//         }
+//         failure {
+//             echo "Build failed. Check the logs for errors."
+//         }
+//     }
+// }
 
 
 

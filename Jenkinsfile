@@ -32,6 +32,10 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 bat '''
+                    echo Cleaning npm cache...
+                    npm cache clean --force
+
+                    
                     echo Installing dependencies...
                     npm install
                 '''

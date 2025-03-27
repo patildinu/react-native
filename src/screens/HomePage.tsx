@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Image, ActivityIndicator, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, ActivityIndicator, TouchableOpacity, FlatList, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const UNSPLASH_ACCESS_KEY = 'PfH37OzK8hkhunTtF7AG8szL-msqVaQn2pijIHsv9qM'; 
-const TransactionPage = () => {
+const HomePage = () => {
   const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState('');
   const [images, setImages] = useState([]);
@@ -116,6 +116,7 @@ const TransactionPage = () => {
   );
 
   return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>Image Search</Text>
@@ -165,6 +166,7 @@ const TransactionPage = () => {
         )}
       </View>
     </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -256,4 +258,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TransactionPage;
+export default HomePage;

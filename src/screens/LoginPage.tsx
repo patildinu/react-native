@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F1F7F7',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 8,
   },
   loginPage: {
     width: '95%',
